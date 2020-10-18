@@ -25,3 +25,30 @@
   command: mv {{ install_dir }} {{ install_dir }}.{{ lookup('pipe','date +%Y-%m-%d-%H-%M-%S') }}
   when: ins_dir.stat.exists
 
+- name: Remove host entries from /etc/hosts
+  become: true
+  blockinfile:
+    path: /etc/hosts
+    block: |
+      {{ hostvars[item].ansible_host }} {{ hostvars[item].inventory_hostname }}
+    marker: "# {mark} ANSIBLE MANAGED BLOCK {{ hostvars[item].inventory_hostname }}"
+    state: absent
+  with_items:
+  - "{{ groups['all'] | difference (groups.local) }}"
+
+- name: Delete .ssh/known_hosts
+  delegate_to: localhost
+  file:
+    path: "{{ lookup('env','HOME') }}/.ssh/known_hosts"
+    state: absent
+
+- name: Remove proxy entry from /etc/dnf/dnf.conf
+  delegate_to: localhost
+  become: true
+  ini_file:
+    path: /etc/dnf/dnf.conf
+    section: main
+    option: proxy
+    state: absent
+  when:
+  - ansible_pkg_mgr == "dnf"

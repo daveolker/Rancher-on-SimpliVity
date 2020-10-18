@@ -32,6 +32,12 @@
         no_proxy: "{{ proxy.except }}"
     when: proxy is defined
 
+  - name: "Create {{ kits_folder }} if it doesn't exist"
+    file:
+      path: "{{ kits_folder }}"
+      state: directory
+      mode: '0755'
+
   - name: Download govc
     get_url:
       url: "{{ item.url }}"

@@ -38,8 +38,8 @@ kits_compose_version: 1.26.0
 kits_nginxplus_version: v1.7.2
 
 ubuntu_iso:
-  url: "http://cdimage.ubuntu.com/releases/18.04/release/ubuntu-18.04.4-server-amd64.iso"
-  hash: "sha256:e2ecdace33c939527cbc9e8d23576381c493b071107207d2040af72595f8990b"
+  url: "http://cdimage.ubuntu.com/releases/18.04/release/ubuntu-18.04.5-server-amd64.iso"
+  hash: "sha256:8c5fc24894394035402f66f3824beb7234b757dd2b5531379cb310cedfdf0996"
 
 centos_everything_iso:
   url: "http://centos.mirror.constant.com/7.8.2003/isos/x86_64/CentOS-7-x86_64-Everything-2003.iso"

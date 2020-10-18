@@ -27,15 +27,15 @@
   changed_when: false
   register: govc_ls_info
 
-- name: "Verify existence of Datacenter: {{ datacenter }}"
+- name: "Verify existence of Datacenter: '{{ datacenter }}'"
   delegate_to: localhost
-  command: "{{ govc_file }} datacenter.info {{ datacenter }}"
+  command: "{{ govc_file }} datacenter.info '{{ datacenter }}'"
   changed_when: false
   register: govc_dc_info
 
-- name: "Verify existence of Portgroup: {{ vm_portgroup }} in DVSwitch: {{ vm_dvswitch }}"
+- name: "Verify existence of Portgroup: '{{ vm_portgroup }}' in DVSwitch: '{{ vm_dvswitch }}'"
   delegate_to: localhost
-  command: "{{ govc_file }} dvs.portgroup.info -pg {{ vm_portgroup }} {{ vm_dvswitch }}"
+  command: "{{ govc_file }} dvs.portgroup.info -pg '{{ vm_portgroup }}' '{{ vm_dvswitch }}'"
   changed_when: false
   register: govc_pg_info
 
