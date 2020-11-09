@@ -16,4 +16,10 @@
 ---
 - include_tasks: token.yml
 - include_tasks: provision.yml
-  when: provision is defined
+  when:
+  - provision is defined
+  - (csi_driver == "svt" or csi_driver == "vsphere")
+- include_tasks: provision-mapr.yml
+  when:
+  - provision is defined
+  - (csi_driver == "mapr-fuse" or csi_driver == "mapr-nfs")

@@ -1,0 +1,127 @@
+###
+# Copyright (2020) Hewlett Packard Enterprise Development LP
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# You may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+### 
+---
+- name: Retrieve User Cluster ID
+  uri:
+    url:  "{{ rancher.url }}/{{ rancher.apiversion }}/clusters?name={{ user_cluster.name }}"
+    validate_certs: "{{ rancher.validate_certs }}"
+    headers:
+      Accept: application/json
+      Content-Type: application/json
+      Authorization: Bearer {{ bearer_token }}
+    method: GET
+    timeout: 4
+    status_code:
+    - 200
+  register: res
+
+- set_fact:
+    uc_kube_config_file: "{{ install_dir }}/kube_config.{{ user_cluster.name }}.{{ userclusterID }}"
+  vars:
+    userclusterID:  "{{ res.json.data[0].id }}"
+
+- name: Verify Presence of the kubeconfig file
+  stat:
+    path: "{{ uc_kube_config_file }}"
+  register: res
+
+- fail:
+    msg: "Cannot find the kubeconfig file {{ uc_kube_config_file }} for cluster {{ user_cluster.name }}"
+  when: not res.stat.exists
+
+- name: Set variables specific to MapR FUSE-based CSI Driver
+  set_fact:
+    mapr_csi_provisioner: "com.mapr.csi-kdf"
+    mapr_csi_template: "csi-maprkdf-v1.2.0.yaml.j2"
+    mapr_csi_controller_driver_image: "archerxyz/csi-kdfplugin:1.2.0_000_centos8"
+  when: csi_driver == "mapr-fuse"
+
+- name: Set variables specific to MapR NFS-based CSI Driver
+  set_fact:
+    mapr_csi_provisioner: "com.mapr.csi-nfskdf"
+    mapr_csi_template: "csi-maprnfskdf-v1.0.0.yaml.j2"
+    mapr_csi_controller_driver_image: "archerxyz/csi-nfsplugin:1.0.0_000_centos8"
+  when: csi_driver == "mapr-nfs"
+
+- name: Deploy MapR CSI Driver
+  k8s:
+    state: present
+    validate_certs: true
+    kubeconfig: "{{ uc_kube_config_file }}"
+    definition: "{{ lookup('template', mapr_csi_template) }}"
+
+- name: "Create Namespace {{ mapr_csi_namespace }}"
+  k8s:
+    state: present
+    definition:
+      kind: Namespace
+      apiVersion: v1
+      metadata:
+        name: "{{ mapr_csi_namespace }}"
+    kubeconfig: "{{ uc_kube_config_file }}"
+
+- name: Create MapR Ticket Secret
+  k8s:
+    state: present
+    validate_certs: true
+    kubeconfig: "{{ uc_kube_config_file }}"
+    definition:
+      kind: Secret
+      apiVersion: v1
+      type: Opaque
+      data:
+        CONTAINER_TICKET: "{{ vault_mapr_csi_ticket | b64encode }}"
+      metadata:
+        name: mapr-ticket-secret
+        namespace: "{{ mapr_csi_namespace }}"
+
+- name: Create MapR Provisioner REST Secret
+  k8s:
+    state: present
+    validate_certs: true
+    kubeconfig: "{{ uc_kube_config_file }}"
+    definition:
+      kind: Secret
+      apiVersion: v1
+      type: Opaque
+      data:
+        MAPR_CLUSTER_USER: "{{ mapr_csi_user | b64encode }}"
+        MAPR_CLUSTER_PASSWORD: "{{ vault_mapr_csi_password | b64encode }}"
+      metadata:
+        name: mapr-provisioner-secret
+        namespace: "{{ mapr_csi_namespace }}"
+
+- name: Create MapR CSI StorageClass
+  k8s:
+    state: present
+    validate_certs: true
+    kubeconfig: "{{ uc_kube_config_file }}"
+    definition: "{{ lookup('template','csi-mapr-sc.yml.j2') }}"
+
+- name: Create MapR CSI PersistentVolumeClaim
+  k8s:
+    state: present
+    validate_certs: true
+    kubeconfig: "{{ uc_kube_config_file }}"
+    definition: "{{ lookup('template','csi-mapr-pvc.yml.j2') }}"
+
+- name: Create Test Busybox Pod
+  k8s:
+    state: present
+    validate_certs: true
+    kubeconfig: "{{ uc_kube_config_file }}"
+    definition: "{{ lookup('template','csi-mapr-testpod.yml.j2') }}"
+
