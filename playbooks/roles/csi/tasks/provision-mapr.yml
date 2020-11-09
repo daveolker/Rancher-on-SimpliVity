@@ -56,6 +56,10 @@
     mapr_csi_controller_driver_image: "archerxyz/csi-nfsplugin:1.0.0_000_centos8"
   when: csi_driver == "mapr-nfs"
 
+- name: Remove NoSchedule taint from Nodes
+  shell: |
+    kubectl --kubeconfig {{ uc_kube_config_file }} taint nodes --all=true node.cloudprovider.kubernetes.io/uninitialized=true:NoSchedule-
+
 - name: Deploy MapR CSI Driver
   k8s:
     state: present
