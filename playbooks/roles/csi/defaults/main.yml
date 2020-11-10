@@ -52,6 +52,7 @@ mapr_csi_user: "mapr"
 mapr_csi_namespace: "mapr-csi-test"
 mapr_csi_storageclass_name: "mapr-csi-sc"
 mapr_csi_pvc_name: "mapr-csi-pvc"
+mapr_csi_fuse_platinum: false
 
 #
 # MapR CSI Common Images

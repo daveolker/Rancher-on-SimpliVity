@@ -19,3 +19,7 @@ parameters:
     namePrefix: "dynamic"
     mountPrefix: "/mapr-csi"
     advisoryquota: "100M"
+{% if ( (csi_driver == 'mapr-fuse') and (mapr_csi_fuse_platinum) ) %}
+    platinum: "true"
+    license: "platinum"
+{% endif %}

@@ -59,6 +59,7 @@
 - name: Remove NoSchedule taint from Nodes
   shell: |
     kubectl --kubeconfig {{ uc_kube_config_file }} taint nodes --all=true node.cloudprovider.kubernetes.io/uninitialized=true:NoSchedule-
+  failed_when: false
 
 - name: Deploy MapR CSI Driver
   k8s:
