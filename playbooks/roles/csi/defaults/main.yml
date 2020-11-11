@@ -52,7 +52,6 @@ mapr_csi_user: "mapr"
 mapr_csi_namespace: "mapr-csi-test"
 mapr_csi_storageclass_name: "mapr-csi-sc"
 mapr_csi_pvc_name: "mapr-csi-pvc"
-mapr_csi_fuse_platinum: false
 
 #
 # MapR CSI Common Images
@@ -65,4 +64,19 @@ mapr_csi_controller_snapshotter_image:         "quay.io/k8scsi/csi-snapshotter:v
 mapr_csi_controller_snapshot_controller_image: "quay.io/k8scsi/snapshot-controller:v3.0.2"
 mapr_csi_controller_livenessprobe_image:       "quay.io/k8scsi/livenessprobe:v2.0.0"
 mapr_csi_controller_resizer_image:             "quay.io/k8scsi/csi-resizer:v0.5.0"
-mapr_csi_node_driver_image:                    "archerxyz/csi-kdfprovisioner:1.2.0_000"
+mapr_csi_node_driver_image:                    "maprtech/csi-kdfprovisioner:1.2.0_000"
+
+#
+# MapR FUSE-specific Variables and Images
+#
+mapr_csi_fuse_platinum: false
+mapr_csi_fuse_provisioner:                     "com.mapr.csi-kdf"
+mapr_csi_fuse_template:                        "csi-maprkdf-v1.2.0.yaml.j2"
+mapr_csi_fuse_controller_driver_image:         "maprtech/csi-kdfplugin:1.2.0_000_centos8"
+
+#
+# MapR NFS-specific Variables and Images
+#
+mapr_csi_nfs_provisioner:                      "com.mapr.csi-nfskdf"
+mapr_csi_nfs_template:                         "csi-maprnfskdf-v1.0.0.yaml.j2"
+mapr_csi_nfs_controller_driver_image:          "maprtech/csi-nfsplugin:1.0.0_000_centos8"

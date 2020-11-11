@@ -44,16 +44,16 @@
 
 - name: Set variables specific to MapR FUSE-based CSI Driver
   set_fact:
-    mapr_csi_provisioner: "com.mapr.csi-kdf"
-    mapr_csi_template: "csi-maprkdf-v1.2.0.yaml.j2"
-    mapr_csi_controller_driver_image: "archerxyz/csi-kdfplugin:1.2.0_000_centos8"
+    mapr_csi_provisioner: "{{ mapr_csi_fuse_provisioner }}"
+    mapr_csi_template: "{{ mapr_csi_fuse_template }}"
+    mapr_csi_controller_driver_image: "{{ mapr_csi_fuse_controller_driver_image }}"
   when: csi_driver == "mapr-fuse"
 
 - name: Set variables specific to MapR NFS-based CSI Driver
   set_fact:
-    mapr_csi_provisioner: "com.mapr.csi-nfskdf"
-    mapr_csi_template: "csi-maprnfskdf-v1.0.0.yaml.j2"
-    mapr_csi_controller_driver_image: "archerxyz/csi-nfsplugin:1.0.0_000_centos8"
+    mapr_csi_provisioner: "{{ mapr_csi_nfs_provisioner }}"
+    mapr_csi_template: "{{ mapr_csi_nfs_template }}"
+    mapr_csi_controller_driver_image: "{{ mapr_csi_nfs_controller_driver_image }}"
   when: csi_driver == "mapr-nfs"
 
 - name: Remove NoSchedule taint from Nodes
