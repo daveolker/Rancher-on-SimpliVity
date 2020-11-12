@@ -31,7 +31,7 @@ kits_folder: "{{ lookup('env','HOME') }}/kits"
 
 kits_rke_version: v1.1.3
 kits_rancher_cli_version: v2.4.5
-kits_kubectl_cli_version: v1.18.5
+kits_kubectl_cli_version: v1.19.3
 kits_helm_cli_version: v3.2.4
 kits_harbor_version: v2.0.1              # only v2+ tested/supported
 kits_compose_version: 1.26.0
@@ -79,7 +79,7 @@ kits_bom:
 
   kubectlcli:
     url: https://storage.googleapis.com/kubernetes-release/release/{{ kits_kubectl_cli_version }}/bin/linux/amd64/kubectl
-    hash: "sha256:69d9b044ffaf544a4d1d4b40272f05d56aaf75d7e3c526d5418d1d3c78249e45"        # checksum for 1.18.5
+    hash: "sha256:84eeb8237448e4f431fef0f0ec0ba8b07558d8e52d5a7e89b4ae64dadcffbe66"        # checksum for 1.19.3
 
   ranchercli:
     url:  https://github.com/rancher/cli/releases/download/{{ kits_rancher_cli_version }}/rancher-linux-amd64-{{ kits_rancher_cli_version }}.tar.gz
