@@ -24,6 +24,7 @@ dns_suffixes: ['am2.cloudra.local','hpe.org']             # list of DNS suffixes
 #
 # DHCP related settings
 #
+dhcp_server: true                                         # Deploy a DHCP server (true) or don't deploy (false)
 dhcp_subnet: 10.15.152.0/24                               # subnet to use on the above VLAN (see your net admin)
 dhcp_range: '10.15.152.100 10.15.152.150'                 # DHCP range to use on the above VLAN (see your net admin)
 dhcp_default_lease_time: 86400                            # DHCP default lease time (24 hours)

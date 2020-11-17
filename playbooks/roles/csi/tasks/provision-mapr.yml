@@ -56,10 +56,40 @@
     mapr_csi_controller_driver_image: "{{ mapr_csi_nfs_controller_driver_image }}"
   when: csi_driver == "mapr-nfs"
 
-- name: Remove NoSchedule taint from Nodes
-  shell: |
-    kubectl --kubeconfig {{ uc_kube_config_file }} taint nodes --all=true node.cloudprovider.kubernetes.io/uninitialized=true:NoSchedule-
-  failed_when: false
+- name: Create CSI Config Map
+  k8s:
+    state: present
+    validate_certs: true
+    kubeconfig: "{{ uc_kube_config_file }}"
+    definition:
+      kind: ConfigMap
+      apiVersion: v1
+      metadata:
+        name: cloud-config
+        namespace: kube-system
+      data:
+        vsphere.conf: "{{ lookup('template', 'csi-vsphere.conf.j2') }}"
+
+- name: Create Cloud Controller Manager Roles
+  k8s:
+    state: present
+    validate_certs: true
+    kubeconfig: "{{ uc_kube_config_file }}"
+    definition: "{{ lookup('file', 'cloud-controller-manager-roles.yaml') }}"
+
+- name: Create Cloud Controller Manager Role Bindings
+  k8s:
+    state: present
+    validate_certs: true
+    kubeconfig: "{{ uc_kube_config_file }}"
+    definition: "{{ lookup('file', 'cloud-controller-manager-role-bindings.yaml') }}"
+
+- name: Create Cloud Controller Manager DaemonSet
+  k8s:
+    state: present
+    validate_certs: true
+    kubeconfig: "{{ uc_kube_config_file }}"
+    definition: "{{ lookup('template', 'cloud-controller-manager-ds.rancher.yaml.j2') }}"
 
 - name: Deploy MapR CSI Driver
   k8s:
@@ -68,6 +98,9 @@
     kubeconfig: "{{ uc_kube_config_file }}"
     definition: "{{ lookup('template', mapr_csi_template) }}"
 
+#
+# Deploy Test Workload in separate Namespace
+#
 - name: "Create Namespace {{ mapr_csi_namespace }}"
   k8s:
     state: present
@@ -129,4 +162,3 @@
     validate_certs: true
     kubeconfig: "{{ uc_kube_config_file }}"
     definition: "{{ lookup('template','csi-mapr-testpod.yml.j2') }}"
-

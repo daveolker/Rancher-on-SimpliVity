@@ -16,13 +16,21 @@
 ---
 
 - include_tasks: provision.yml
-  when: provision is defined
+  when:
+  - provision is defined
+  - dhcp_server
 
 - include_tasks: configure.yml
-  when: configure is defined
+  when:
+  - configure is defined
+  - dhcp_server
 
 - include_tasks: poweron.yml
-  when: poweron is defined
+  when:
+  - poweron is defined
+  - dhcp_server
 
 - include_tasks: decommission.yml
-  when: decommission is defined
+  when:
+  - decommission is defined
+  - dhcp_server
