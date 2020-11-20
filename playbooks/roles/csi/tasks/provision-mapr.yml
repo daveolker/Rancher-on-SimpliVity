@@ -98,67 +98,68 @@
     kubeconfig: "{{ uc_kube_config_file }}"
     definition: "{{ lookup('template', mapr_csi_template) }}"
 
-#
-# Deploy Test Workload in separate Namespace
-#
-- name: "Create Namespace {{ mapr_csi_namespace }}"
-  k8s:
-    state: present
-    definition:
-      kind: Namespace
-      apiVersion: v1
-      metadata:
-        name: "{{ mapr_csi_namespace }}"
-    kubeconfig: "{{ uc_kube_config_file }}"
+- block:
 
-- name: Create MapR Ticket Secret
-  k8s:
-    state: present
-    validate_certs: true
-    kubeconfig: "{{ uc_kube_config_file }}"
-    definition:
-      kind: Secret
-      apiVersion: v1
-      type: Opaque
-      data:
-        CONTAINER_TICKET: "{{ vault_mapr_csi_ticket | b64encode }}"
-      metadata:
-        name: mapr-ticket-secret
-        namespace: "{{ mapr_csi_namespace }}"
+  - name: "Create Namespace {{ mapr_csi_namespace }}"
+    k8s:
+      state: present
+      definition:
+        kind: Namespace
+        apiVersion: v1
+        metadata:
+          name: "{{ mapr_csi_namespace }}"
+      kubeconfig: "{{ uc_kube_config_file }}"
+  
+  - name: Create MapR Ticket Secret
+    k8s:
+      state: present
+      validate_certs: true
+      kubeconfig: "{{ uc_kube_config_file }}"
+      definition:
+        kind: Secret
+        apiVersion: v1
+        type: Opaque
+        data:
+          CONTAINER_TICKET: "{{ vault_mapr_csi_ticket | b64encode }}"
+        metadata:
+          name: mapr-ticket-secret
+          namespace: "{{ mapr_csi_namespace }}"
+  
+  - name: Create MapR Provisioner REST Secret
+    k8s:
+      state: present
+      validate_certs: true
+      kubeconfig: "{{ uc_kube_config_file }}"
+      definition:
+        kind: Secret
+        apiVersion: v1
+        type: Opaque
+        data:
+          MAPR_CLUSTER_USER: "{{ mapr_csi_user | b64encode }}"
+          MAPR_CLUSTER_PASSWORD: "{{ vault_mapr_csi_password | b64encode }}"
+        metadata:
+          name: mapr-provisioner-secret
+          namespace: "{{ mapr_csi_namespace }}"
+  
+  - name: Create MapR CSI StorageClass
+    k8s:
+      state: present
+      validate_certs: true
+      kubeconfig: "{{ uc_kube_config_file }}"
+      definition: "{{ lookup('template','csi-mapr-sc.yml.j2') }}"
+  
+  - name: Create MapR CSI PersistentVolumeClaim
+    k8s:
+      state: present
+      validate_certs: true
+      kubeconfig: "{{ uc_kube_config_file }}"
+      definition: "{{ lookup('template','csi-mapr-pvc.yml.j2') }}"
+  
+  - name: Create Test Busybox Pod
+    k8s:
+      state: present
+      validate_certs: true
+      kubeconfig: "{{ uc_kube_config_file }}"
+      definition: "{{ lookup('template','csi-mapr-testpod.yml.j2') }}"
 
-- name: Create MapR Provisioner REST Secret
-  k8s:
-    state: present
-    validate_certs: true
-    kubeconfig: "{{ uc_kube_config_file }}"
-    definition:
-      kind: Secret
-      apiVersion: v1
-      type: Opaque
-      data:
-        MAPR_CLUSTER_USER: "{{ mapr_csi_user | b64encode }}"
-        MAPR_CLUSTER_PASSWORD: "{{ vault_mapr_csi_password | b64encode }}"
-      metadata:
-        name: mapr-provisioner-secret
-        namespace: "{{ mapr_csi_namespace }}"
-
-- name: Create MapR CSI StorageClass
-  k8s:
-    state: present
-    validate_certs: true
-    kubeconfig: "{{ uc_kube_config_file }}"
-    definition: "{{ lookup('template','csi-mapr-sc.yml.j2') }}"
-
-- name: Create MapR CSI PersistentVolumeClaim
-  k8s:
-    state: present
-    validate_certs: true
-    kubeconfig: "{{ uc_kube_config_file }}"
-    definition: "{{ lookup('template','csi-mapr-pvc.yml.j2') }}"
-
-- name: Create Test Busybox Pod
-  k8s:
-    state: present
-    validate_certs: true
-    kubeconfig: "{{ uc_kube_config_file }}"
-    definition: "{{ lookup('template','csi-mapr-testpod.yml.j2') }}"
+  when: user_cluster.deploy_sample_workload
