@@ -60,6 +60,8 @@
     touch  "{{ ansible_user_dir }}/.harbor_installed"
   args:
     creates:  "{{ ansible_user_dir }}/.harbor_installed"
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/usr/local/bin"
   register: res
 
 - name: Start Harbor
@@ -67,6 +69,8 @@
   shell: |
     cd {{ ansible_user_dir }}/harbor
     docker-compose up -d
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/usr/local/bin"
   register: res
 
 - debug: var=res

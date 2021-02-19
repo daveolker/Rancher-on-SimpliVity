@@ -49,7 +49,15 @@ centos_min_iso:
   url: "http://centos.mirror.constant.com/7.8.2003/isos/x86_64/CentOS-7-x86_64-Minimal-2003.iso"
   hash: "sha256:659691c28a0e672558b003d223f83938f254b39875ee7559d1a4a14c79173193"
 
-os_iso: "{% if packer_os_flavor is defined and packer_os_flavor == 'centos' %}{{ centos_min_iso }}{% else %}{{ ubuntu_iso }}{% endif %}"
+centos8_boot_iso:
+  url: "http://mirrors.usc.edu/pub/linux/distributions/centos/8.1.1911/isos/x86_64/CentOS-8.1.1911-x86_64-boot.iso"
+  hash: "sha256:7fea13202bf2f26989df4175aace8fdc16e1137f7961c33512cbfad844008948"
+
+centos8_dvd_iso:
+  url: "http://mirrors.usc.edu/pub/linux/distributions/centos/8.1.1911/isos/x86_64/CentOS-8.1.1911-x86_64-dvd1.iso"
+  hash: "sha256:3ee3f4ea1538e026fff763e2b284a6f20b259d91d1ad5688f5783a67d279423b"
+
+os_iso: "{% if packer_os_flavor is defined and packer_os_flavor == 'centos' %}{{ centos8_dvd_iso }}{% else %}{{ ubuntu_iso }}{% endif %}"
 # end of helpers
 
 
