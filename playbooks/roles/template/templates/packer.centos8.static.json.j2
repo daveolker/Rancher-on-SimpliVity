@@ -1,0 +1,62 @@
+{
+  "_comment": "Copyright (2020) Hewlett Packard Enterprise Development LP",
+  "builders": [
+    {
+      "CPUs": 2,
+      "RAM": 4096,
+      "RAM_reserve_all": false,
+      "boot_command": [
+        "<esc><wait>",
+        "linux inst.ks=hd:/dev/sr1:{{ packer_template }}.preseed.static.cfg<enter>"
+      ],
+      "boot_order": "disk,cdrom",
+      "boot_wait": "10s",
+      "cd_files": [
+        "{{ install_dir }}/{{ packer_template }}.preseed.static.cfg"
+      ],
+
+      "cluster": "{{ vcenter_cluster }}",
+      "datacenter": "{{ datacenter }}",
+      "datastore": "{{ datastore }}",
+      "disk_controller_type": "pvscsi",
+      "folder": "{{ admin_folder }}",
+      "guest_os_type": "centos8_64Guest",
+      "insecure_connection": "true",
+      "iso_checksum": "{{ packer_iso_checksum }}",
+      "iso_urls": "{{ packer_iso_urls }}",
+      "network_adapters": [
+        {
+          "network": "{{ vm_portgroup }}",
+          "network_card": "vmxnet3"
+        }
+      ],
+      "password": "{{ '{{' }}user `vcenter_password`{{ '}}' }}",
+      "ssh_password": "server",
+      "ssh_username": "root",
+      "storage": [
+        {
+          "disk_size": 8192,
+          "disk_thin_provisioned": true
+        }
+      ],
+      "type": "vsphere-iso",
+      "username": "{{ vcenter_username }}",
+      "vcenter_server": "{{ vcenter_hostname }}",
+      "vm_name": "{{ packer_template }}",
+      "vm_version": 15
+    }
+  ],
+  "provisioners": [
+    {
+      "inline": [
+        "sudo yum install -y cloud-init",
+        "sudo yum install -y cloud-utils-growpart",
+        "sudo passwd -l root"
+      ],
+      "type": "shell"
+    }
+  ],
+  "variables": {
+    "vcenter_password": ""
+  }
+}
