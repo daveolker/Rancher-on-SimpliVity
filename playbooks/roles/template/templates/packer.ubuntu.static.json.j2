@@ -1,48 +1,9 @@
 {
-
   "_comment": "Copyright (2020) Hewlett Packard Enterprise Development LP",
-
-  "variables": {
-      "vcenter_password":  ""
-  },
-
   "builders": [
     {
-      "type": "vsphere-iso",
-
-      "vcenter_server":      "{{ vcenter_hostname }}",
-      "username":            "{{ vcenter_username }}",
-      "password":            "{{ '{{' }}user `vcenter_password`{{ '}}' }}",
-      "insecure_connection": "true",
-      "datacenter": "{{ datacenter }}",
-
-      "vm_name": "{{ packer_template }}",
-      "folder": "{{ admin_folder }}",
-      "cluster": "{{ vcenter_cluster }}",
-      "datastore": "{{ datastore }}",
-
-      "guest_os_type": "ubuntu64Guest",
-      "vm_version": 15,
-
-      "ssh_username": "{{ ansible_user }}",
-      "ssh_password": "ThisIsATemporaryPassword",
-
-      "CPUs":             2,
-      "RAM":              4096,
-
-      "disk_controller_type":  "pvscsi",
-      "disk_size":        8192,
-      "disk_thin_provisioned": true,
-
-      "network_card": "vmxnet3",
-      "convert_to_template": true,
-      "network": "{{ vm_portgroup }}",
-      "iso_urls": "{{ packer_iso_urls }}",
-      "iso_checksum": "{{ packer_iso_checksum }}",
-      "iso_checksum_type": "{{ packer_iso_checksum_type }}",
-      "floppy_files": [
-        "{{ install_dir }}/{{ packer_template }}.preseed.static.cfg"
-      ],
+      "CPUs": 2,
+      "RAM": 4096,
       "boot_command": [
         "<enter><wait><f6><wait><esc><wait>",
         "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
@@ -60,13 +21,44 @@
         " locale=en_US",
         " file=/media/{{ packer_template }}.preseed.static.cfg",
         "<enter>"
-      ]
+      ],
+      "cluster": "{{ vcenter_cluster }}",
+      "convert_to_template": true,
+      "datacenter": "{{ datacenter }}",
+      "datastore": "{{ datastore }}",
+      "disk_controller_type": "pvscsi",
+      "floppy_files": [
+        "{{ install_dir }}/{{ packer_template }}.preseed.static.cfg"
+      ],
+      "folder": "{{ admin_folder }}",
+      "guest_os_type": "ubuntu64Guest",
+      "insecure_connection": "true",
+      "iso_checksum": "{{ packer_iso_checksum }}",
+      "iso_urls": "{{ packer_iso_urls }}",
+      "network_adapters": [
+        {
+          "network": "{{ vm_portgroup }}",
+          "network_card": "vmxnet3"
+        }
+      ],
+      "password": "{{ '{{' }}user `vcenter_password`{{ '}}' }}",
+      "ssh_password": "ThisIsATemporaryPassword",
+      "ssh_username": "{{ ansible_user }}",
+      "storage": [
+        {
+          "disk_size": 8192,
+          "disk_thin_provisioned": true
+        }
+      ],
+      "type": "vsphere-iso",
+      "username": "{{ vcenter_username }}",
+      "vcenter_server": "{{ vcenter_hostname }}",
+      "vm_name": "{{ packer_template }}",
+      "vm_version": 15
     }
   ],
-
   "provisioners": [
     {
-      "type": "shell",
       "environment_vars": [
         "DEBIAN_FRONTEND=noninteractive",
         "UPDATE=true",
@@ -78,13 +70,16 @@
 {% endif %}
         "SSH_USERNAME={{ ansible_user }}",
         "SSH_PASSWORD=ThisIsATemporaryPassword"
-        ],
+      ],
       "execute_command": "echo 'ThisIsATemporaryPassword'|{{ '{{' }}.Vars{{ '}}' }} sudo -E -S bash '{{ '{{' }}.Path{{ '}}' }}'",
       "expect_disconnect": true,
       "scripts": [
         "{{ install_dir }}/{{ packer_template }}.post-provisioner.sh"
-        ]
-     }
-  ]
+      ],
+      "type": "shell"
+    }
+  ],
+  "variables": {
+    "vcenter_password": ""
+  }
 }
-

@@ -37,9 +37,17 @@ kits_harbor_version: v2.0.1              # only v2+ tested/supported
 kits_compose_version: 1.26.0
 kits_nginxplus_version: v1.7.2
 
+#ubuntu_iso:
+#  url: "http://old-releases.ubuntu.com/releases/18.04.4/ubuntu-18.04-server-amd64.iso"
+#  hash: "sha256:a7f5c7b0cdd0e9560d78f1e47660e066353bb8a79eb78d1fc3f4ea62a07e6cbc"
+
 ubuntu_iso:
-  url: "http://cdimage.ubuntu.com/releases/18.04/release/ubuntu-18.04.5-server-amd64.iso"
+  url: "https://cdimage.ubuntu.com/releases/18.04.5/release/ubuntu-18.04.5-server-amd64.iso"
   hash: "sha256:8c5fc24894394035402f66f3824beb7234b757dd2b5531379cb310cedfdf0996"
+
+#ubuntu_iso:
+#  url: "https://releases.ubuntu.com/20.04.2/ubuntu-20.04.2-live-server-amd64.iso"
+#  hash: "sha256:d1f2bf834bbe9bb43faf16f9be992a6f3935e65be0edece1dee2aa6eb1767423"
 
 centos_iso:
   url: "http://centos.mirror.constant.com/7.8.2003/isos/x86_64/CentOS-7-x86_64-Everything-2003.iso"
