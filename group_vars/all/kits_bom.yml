@@ -49,9 +49,13 @@ ubuntu_iso:
 #  url: "https://releases.ubuntu.com/20.04.2/ubuntu-20.04.2-live-server-amd64.iso"
 #  hash: "sha256:d1f2bf834bbe9bb43faf16f9be992a6f3935e65be0edece1dee2aa6eb1767423"
 
+#centos_iso:
+#  url: "http://centos.mirror.constant.com/7.8.2003/isos/x86_64/CentOS-7-x86_64-Everything-2003.iso"
+#  hash: "sha256:4120aff542c2f9a30bcf90d4d79e39511e5d9eabdf202566a94ff24ea7f0974c"
+
 centos_iso:
-  url: "http://centos.mirror.constant.com/7.8.2003/isos/x86_64/CentOS-7-x86_64-Everything-2003.iso"
-  hash: "sha256:4120aff542c2f9a30bcf90d4d79e39511e5d9eabdf202566a94ff24ea7f0974c"
+  url: "http://centos.mirror.lstn.net/7.9.2009/isos/x86_64/CentOS-7-x86_64-Everything-2009.iso"
+  hash: "sha256:689531cce9cf484378481ae762fae362791a9be078fda10e4f6977bf8fa71350"
 
 centos8_iso:
   url: "http://mirrors.usc.edu/pub/linux/distributions/centos/8.1.1911/isos/x86_64/CentOS-8.1.1911-x86_64-dvd1.iso"
