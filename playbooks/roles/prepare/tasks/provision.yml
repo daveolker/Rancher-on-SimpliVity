@@ -50,7 +50,7 @@
     mode: u=rwx,g=rx,o=rx
   with_items: "{{ prepare_client_tools }}"
 
-- name: create VM Folders
+- name: Create VM Folders
   vcenter_folder:
     hostname: "{{ vcenter_hostname }}"
     username: "{{ vcenter_username }}"

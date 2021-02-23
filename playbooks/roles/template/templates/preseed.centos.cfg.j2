@@ -65,9 +65,8 @@ chrony
 {% if proxy is defined %}
 echo proxy={{ proxy.https }} >>/etc/yum.conf
 {% endif %}
-yum install -y epel-release
-yum install -y open-vm-tools
-yum install -y perl
+yum install -y epel-release open-vm-tools perl chrony
+yum upgrade -y
 %end
 
 # Reboot after the installation is complete (optional)
