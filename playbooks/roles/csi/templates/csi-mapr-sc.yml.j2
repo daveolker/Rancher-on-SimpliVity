@@ -1,0 +1,25 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: "{{ mapr_csi_storageclass_name }}"
+  namespace: "{{ mapr_csi_namespace }}"
+provisioner: "{{ mapr_csi_provisioner }}"
+allowVolumeExpansion: true
+reclaimPolicy: Delete
+volumeBindingMode: Immediate
+parameters:
+    csiProvisionerSecretName: "mapr-provisioner-secret"
+    csiProvisionerSecretNamespace: "{{ mapr_csi_namespace }}"
+    csiNodePublishSecretName: "mapr-ticket-secret"
+    csiNodePublishSecretNamespace: "{{ mapr_csi_namespace }}"
+    restServers: "{{ mapr_csi_restServers }}"
+    cldbHosts: "{{ mapr_csi_cldbHosts }}"
+    cluster: "{{ mapr_csi_cluster_name }}"
+    securityType: "{{ mapr_csi_securityType }}"
+    namePrefix: "dynamic"
+    mountPrefix: "/mapr-csi"
+    advisoryquota: "100M"
+{% if ( (csi_driver == 'mapr-fuse') and (mapr_csi_fuse_platinum) ) %}
+    platinum: "true"
+    license: "platinum"
+{% endif %}

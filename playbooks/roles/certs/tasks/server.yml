@@ -40,7 +40,7 @@
     - serverAuth
   when: not servercert.stat.exists | bool
 
-- name: Generate the Certificate for {{ certs_fqdn }}"
+- name: "Generate the Certificate for {{ certs_fqdn }}"
   openssl_certificate:
     path: "{{ install_dir }}/certs/{{ certs_fqdn }}.crt"
     csr_path: "{{ install_dir }}/certs/{{ certs_fqdn }}.csr"

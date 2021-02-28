@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pod-busybox
+  namespace: "{{ mapr_csi_namespace }}"
+spec:
+  securityContext:
+    runAsUser: 5000
+    fsGroup: 5000
+  containers:
+  - name: busybox
+    image: busybox
+    args:
+    - sleep
+    - "1000000"
+    resources:
+      requests:
+        memory: "2Gi"
+        cpu: "500m"
+    volumeMounts:
+    - mountPath: /mapr
+      name: mapr-csi
+  volumes:
+    - name: mapr-csi
+      persistentVolumeClaim:
+        claimName: "{{ mapr_csi_pvc_name }}"
+

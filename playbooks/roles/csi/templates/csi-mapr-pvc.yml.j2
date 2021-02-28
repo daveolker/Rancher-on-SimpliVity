@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: "{{ mapr_csi_pvc_name }}"
+  namespace: "{{ mapr_csi_namespace }}"
+spec:
+  storageClassName: "{{ mapr_csi_storageclass_name }}"
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5G

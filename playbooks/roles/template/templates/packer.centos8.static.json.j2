@@ -7,20 +7,21 @@
       "RAM_reserve_all": false,
       "boot_command": [
         "<esc><wait>",
-        "linux ks=hd:fd0:/{{ packer_template }}.preseed.static.cfg<enter>"
+        "linux inst.ks=hd:/dev/sr1:{{ packer_template }}.preseed.static.cfg<enter>"
       ],
-      "boot_order": "disk,cdrom,floppy",
+      "boot_order": "disk,cdrom",
       "boot_wait": "10s",
+      "cd_files": [
+        "{{ install_dir }}/{{ packer_template }}.preseed.static.cfg"
+      ],
+
       "cluster": "{{ vcenter_cluster }}",
       "convert_to_template": true,
       "datacenter": "{{ datacenter }}",
       "datastore": "{{ datastore }}",
       "disk_controller_type": "pvscsi",
-      "floppy_files": [
-        "{{ install_dir }}/{{ packer_template }}.preseed.static.cfg"
-      ],
       "folder": "{{ admin_folder }}",
-      "guest_os_type": "centos7_64Guest",
+      "guest_os_type": "centos8_64Guest",
       "insecure_connection": "true",
       "iso_checksum": "{{ packer_iso_checksum }}",
       "iso_urls": "{{ packer_iso_urls }}",

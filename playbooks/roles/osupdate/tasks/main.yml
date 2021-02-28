@@ -18,7 +18,6 @@
   include_tasks: proxy_{{ ansible_os_family | lower }}.yml
   when: proxy is defined
 
-# for some reason apt is not available for some time after boot
 - name: Update Package Manager
   become: true
   apt:
@@ -27,6 +26,11 @@
   retries: 50
   register: res
   until: res.cache_update_time is defined
+  when: ansible_distribution == "Ubuntu"
+
+- name: Forcibly Refresh apt Sources
+  become: true
+  shell: apt update -y
   when: ansible_distribution == "Ubuntu"
 
 - name: Update YUM

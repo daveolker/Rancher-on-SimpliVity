@@ -19,24 +19,64 @@ csi_storageclass_name: csivols
 csi_datastore_size: 20
 csi_driver: vsphere
 
-cloud_controller_manager_image:              "gcr.io/cloud-provider-vsphere/cpi/release/manager:latest"
-setup_snapshot_controller_image:             "quay.io/k8scsi/snapshot-controller:v2.0.1"
+cloud_controller_manager_image:                "gcr.io/cloud-provider-vsphere/cpi/release/manager:latest"
+setup_snapshot_controller_image:               "quay.io/k8scsi/snapshot-controller:v2.0.1"
 
-svt_csi_controller_attacher_image:           "quay.io/k8scsi/csi-attacher:v2.2.0"
-svt_csi_controller_snapshotter_image:        "quay.io/k8scsi/csi-snapshotter:v2.1.0"
-svt_csi_controller_driver_image:             "docker.io/hpesimplivity/vsphere-csi-driver:v1.0-rc4"
-svt_csi_controller_livenessprobe_image:      "quay.io/k8scsi/livenessprobe:v2.0.0"
-svt_csi_controller_syncer_image:             "docker.io/hpesimplivity/vsphere-csi-syncer:v1.0-rc4"
-svt_csi_controller_provisioner_image:        "quay.io/k8scsi/csi-provisioner:v1.6.0"
-svt_csi_node_driver_registrar_image:         "quay.io/k8scsi/csi-node-driver-registrar:v1.3.0"
-svt_csi_node_driver_image:                   "docker.io/hpesimplivity/vsphere-csi-driver:v1.0-rc4"
-svt_csi_node_driver_livenessprobe_image:     "quay.io/k8scsi/livenessprobe:v2.0.0"
+svt_csi_controller_attacher_image:             "quay.io/k8scsi/csi-attacher:v2.2.0"
+svt_csi_controller_snapshotter_image:          "quay.io/k8scsi/csi-snapshotter:v2.1.0"
+svt_csi_controller_driver_image:               "docker.io/hpesimplivity/vsphere-csi-driver:v1.0-rc4"
+svt_csi_controller_livenessprobe_image:        "quay.io/k8scsi/livenessprobe:v2.0.0"
+svt_csi_controller_syncer_image:               "docker.io/hpesimplivity/vsphere-csi-syncer:v1.0-rc4"
+svt_csi_controller_provisioner_image:          "quay.io/k8scsi/csi-provisioner:v1.6.0"
+svt_csi_node_driver_registrar_image:           "quay.io/k8scsi/csi-node-driver-registrar:v1.3.0"
+svt_csi_node_driver_image:                     "docker.io/hpesimplivity/vsphere-csi-driver:v1.0-rc4"
+svt_csi_node_driver_livenessprobe_image:       "quay.io/k8scsi/livenessprobe:v2.0.0"
 
-vsphere_csi_controller_attacher_image:       "quay.io/k8scsi/csi-attacher:v1.1.1"
-vsphere_csi_controller_driver_image:         "gcr.io/cloud-provider-vsphere/csi/release/driver:v1.0.2"
-vsphere_csi_controller_livenessprobe_image:  "quay.io/k8scsi/livenessprobe:v1.1.0"
-vsphere_csi_controller_syncer_image:         "gcr.io/cloud-provider-vsphere/csi/release/syncer:v1.0.2"
-vsphere_csi_controller_provisioner_image:    "quay.io/k8scsi/csi-provisioner:v1.2.2"
-vsphere_csi_node_driver_registrar_image:     "quay.io/k8scsi/csi-node-driver-registrar:v1.1.0"
-vsphere_csi_node_driver_image:               "gcr.io/cloud-provider-vsphere/csi/release/driver:v1.0.2"
-vsphere_csi_node_driver_livenessprobe_image: "quay.io/k8scsi/livenessprobe:v1.1.0"
+vsphere_csi_controller_attacher_image:         "quay.io/k8scsi/csi-attacher:v1.1.1"
+vsphere_csi_controller_driver_image:           "gcr.io/cloud-provider-vsphere/csi/release/driver:v1.0.2"
+vsphere_csi_controller_livenessprobe_image:    "quay.io/k8scsi/livenessprobe:v1.1.0"
+vsphere_csi_controller_syncer_image:           "gcr.io/cloud-provider-vsphere/csi/release/syncer:v1.0.2"
+vsphere_csi_controller_provisioner_image:      "quay.io/k8scsi/csi-provisioner:v1.2.2"
+vsphere_csi_node_driver_registrar_image:       "quay.io/k8scsi/csi-node-driver-registrar:v1.1.0"
+vsphere_csi_node_driver_image:                 "gcr.io/cloud-provider-vsphere/csi/release/driver:v1.0.2"
+vsphere_csi_node_driver_livenessprobe_image:   "quay.io/k8scsi/livenessprobe:v1.1.0"
+
+#
+# MapR CSI Common Variables
+#
+mapr_csi_restServers: "15.113.228.220 15.113.228.221 15.113.228.222"
+mapr_csi_cldbHosts: "15.113.228.220 15.113.228.221"
+mapr_csi_cluster_name: "dave_MapR"
+mapr_csi_securityType: "secure"
+mapr_csi_user: "mapr"
+mapr_csi_namespace: "mapr-csi-test"
+mapr_csi_storageclass_name: "mapr-csi-sc"
+mapr_csi_pvc_name: "mapr-csi-pvc"
+
+#
+# MapR CSI Common Images
+#
+mapr_csi_node_driver_registrar_image:          "quay.io/k8scsi/csi-node-driver-registrar:v1.3.0"
+mapr_csi_node_driver_livenessprobe_image:      "quay.io/k8scsi/livenessprobe:v2.0.0"
+mapr_csi_controller_attacher_image:            "quay.io/k8scsi/csi-attacher:v2.2.0"
+mapr_csi_controller_provisioner_image:         "quay.io/k8scsi/csi-provisioner:v1.6.0"
+mapr_csi_controller_snapshotter_image:         "quay.io/k8scsi/csi-snapshotter:v3.0.2"
+mapr_csi_controller_snapshot_controller_image: "quay.io/k8scsi/snapshot-controller:v3.0.2"
+mapr_csi_controller_livenessprobe_image:       "quay.io/k8scsi/livenessprobe:v2.0.0"
+mapr_csi_controller_resizer_image:             "quay.io/k8scsi/csi-resizer:v0.5.0"
+mapr_csi_node_driver_image:                    "maprtech/csi-kdfprovisioner:1.2.1"
+
+#
+# MapR FUSE-specific Variables and Images
+#
+mapr_csi_fuse_platinum: false
+mapr_csi_fuse_provisioner:                     "com.mapr.csi-kdf"
+mapr_csi_fuse_template:                        "csi-maprkdf-v1.2.0.yaml.j2"
+mapr_csi_fuse_controller_driver_image:         "maprtech/csi-kdfplugin:1.2.1"
+
+#
+# MapR NFS-specific Variables and Images
+#
+mapr_csi_nfs_provisioner:                      "com.mapr.csi-nfskdf"
+mapr_csi_nfs_template:                         "csi-maprnfskdf-v1.0.0.yaml.j2"
+mapr_csi_nfs_controller_driver_image:          "maprtech/csi-nfsplugin:1.0.1"

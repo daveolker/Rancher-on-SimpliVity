@@ -24,6 +24,7 @@ dns_suffixes: ['am2.cloudra.local','hpe.org']             # list of DNS suffixes
 #
 # DHCP related settings
 #
+dhcp_server: true                                         # Deploy a DHCP server (true) or don't deploy (false)
 dhcp_subnet: 10.15.152.0/24                               # subnet to use on the above VLAN (see your net admin)
 dhcp_range: '10.15.152.100 10.15.152.150'                 # DHCP range to use on the above VLAN (see your net admin)
 dhcp_default_lease_time: 86400                            # DHCP default lease time (24 hours)
@@ -99,6 +100,7 @@ user_cluster:
 # vm_template: hpe-ubuntu-tpl     # an existing VM template, the admin template by default
   name: api                       # name of the user cluster
   csi: false
+  deploy_sample_workload: false   # Deploy sample CSI workload
   vcenter_credsname: mycreds2     # only one vCenter cluster supported at this time
   scheduledClusterScan:           # If you dont want to schedule CIS Scans simply rename this dictionary to (eg) NoscheduledClusterScan
     enabled: true                 # Refer to the Rancher Documentation for more info about this datastructure

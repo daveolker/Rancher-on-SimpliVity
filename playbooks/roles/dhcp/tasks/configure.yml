@@ -27,7 +27,7 @@
     - isc-dhcp-server
   when: ansible_distribution == "Ubuntu"
 
-- name: Install Pkgs on CentOS Support Node
+- name: Install Pkgs on CentOS 7 Support Node
   become: true
   package:
     name: "{{ packages }}"
@@ -36,7 +36,22 @@
     packages:
     - firewalld
     - dhcp
-  when: ansible_distribution == "CentOS"
+  when:
+   - ansible_distribution == "CentOS"
+   - ansible_distribution_major_version == "7"
+
+- name: Install Pkgs on CentOS 8 Support Node
+  become: true
+  package:
+    name: "{{ packages }}"
+    state: latest
+  vars:
+    packages:
+    - firewalld
+    - dhcp-server
+  when:
+   - ansible_distribution == "CentOS"
+   - ansible_distribution_major_version == "8"
 
 - name: Enable firewall
   become: true

@@ -13,12 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ###
-install
 cdrom
 lang en_US.UTF-8
 keyboard us
 
-network --bootproto=static --ip={{ hostvars[inventory_hostname].ansible_host }} --netmask={{ rancher_subnet | ipaddr('netmask') }} --gateway={{ gateway }} --nameserver {{ dns_servers[0] }}
+network --device=ens192 --bootproto=static --hostname={{ inventory_hostname }} --ip={{ hostvars[inventory_hostname].ansible_host }} --netmask={{ rancher_subnet | ipaddr('netmask') }} --gateway={{ gateway }} --nameserver {{ dns_servers[0] }}
 
 # Set the system's root password (required)
 # Plaintext password is: server
@@ -33,8 +32,8 @@ firewall --disabled
 # Set up the authentication options for the system (required)
 # --enableshadow	enable shadowed passwords by default
 # --passalgo		hash / crypt algorithm for new passwords
-# See the manual page for authconfig for a complete list of possible options.
-authconfig --enableshadow --passalgo=sha512
+# See the manual page for authselect for a complete list of possible options.
+authselect --enableshadow --passalgo=sha512
 
 # State of SELinux on the installed system (optional)
 # Defaults to enforcing
@@ -53,9 +52,7 @@ clearpart --linux --initlabel
 
 # Packages selection
 %packages --ignoremissing
-@^minimal
-@core
-chrony
+@^server-product-environment
 %end 
 
 %addon com_redhat_kdump --disable --reserve-mb='auto'
@@ -66,6 +63,7 @@ chrony
 echo proxy={{ proxy.https }} >>/etc/yum.conf
 {% endif %}
 yum install -y epel-release open-vm-tools perl chrony
+yum remove -y buildah podman
 yum upgrade -y
 %end
 
