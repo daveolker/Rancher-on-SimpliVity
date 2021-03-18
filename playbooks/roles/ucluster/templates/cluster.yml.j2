@@ -20,7 +20,7 @@ rancherKubernetesEngineConfig:
   ignoreDockerVersion: true
   ingress:
     provider: nginx
-  kubernetesVersion: v1.19.3-rancher1-2
+  kubernetesVersion: {{ user_cluster.rancher_k8s_version }}
   monitoring:
     provider: metrics-server
   network:

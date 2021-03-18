@@ -100,6 +100,7 @@ user_cluster:
 # vm_template: hpe-ubuntu-tpl     # an existing VM template, the admin template by default
   name: api                       # name of the user cluster
   csi: false
+  rancher_k8s_version: v1.20.4-rancher1-1 # Version of Kubernetes installed by Rancher
   deploy_sample_workload: false   # Deploy sample CSI workload
   vcenter_credsname: mycreds2     # only one vCenter cluster supported at this time
   scheduledClusterScan:           # If you dont want to schedule CIS Scans simply rename this dictionary to (eg) NoscheduledClusterScan
